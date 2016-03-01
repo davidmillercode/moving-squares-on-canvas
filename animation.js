@@ -1,10 +1,11 @@
 window.onload = function() {
     document.body.style.margin = 0; // fix margin issue -- would do in css but requirement is no css
+
+    // create canvas and append to body
     var c = document.createElement('canvas');
     c.width = 300;
     c.height = 300;
     document.body.appendChild(c);
-    //var c = document.getElementById("myCanvas");
     var ctx = c.getContext("2d");
 
     // generate Png objects

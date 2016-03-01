@@ -1,1 +1,0 @@
-# moving-squares-on-canvas
