@@ -1,17 +1,22 @@
 window.onload = function() {
     document.body.style.margin = 0; // fix margin issue -- would do in css but requirement is no css
 
+    // set variable units of measurement so we can change the canvasSquareSize and everything scales
+    var canvasSquareSize = 300;
+    var sqSize = canvasSquareSize / 3;
+    var halfsqSize = sqSize / 2;
+
     // create canvas and append to body
     var c = document.createElement('canvas');
-    c.width = 300;
-    c.height = 300;
+    c.width = canvasSquareSize;
+    c.height = canvasSquareSize;
     document.body.appendChild(c);
     var ctx = c.getContext("2d");
 
     // generate Png objects
-    var topLeft = new Png(50,50,100,100, "http://riley.dev.kargo.com/code-test/test0.png");
-    var middle = new Png(100,100,100,100, "http://riley.dev.kargo.com/code-test/test1.png");
-    var bottomRight = new Png(150,150,100,100, "http://riley.dev.kargo.com/code-test/test2.png");
+    var topLeft = new Png(halfsqSize, halfsqSize, sqSize, sqSize, "http://riley.dev.kargo.com/code-test/test0.png");
+    var middle = new Png(halfsqSize * 2, halfsqSize * 2, sqSize, sqSize, "http://riley.dev.kargo.com/code-test/test1.png");
+    var bottomRight = new Png(halfsqSize * 3, halfsqSize * 3, sqSize, sqSize, "http://riley.dev.kargo.com/code-test/test2.png");
 
     // create MovementTracker which will update Png objs and properly render them in canvas
     var movementTracker = new MovementTracker(topLeft, middle, bottomRight);
@@ -23,8 +28,8 @@ window.onload = function() {
     function Png(x, y, w, h, url){
         this.x = x || 0;
         this.y = y || 0;
-        this.w = w || 100;
-        this.h = h || 100;
+        this.w = w || sqSize;
+        this.h = h || sqSize;
         this.url = url || "http://riley.dev.kargo.com/code-test/test0.png";
     }
 
@@ -52,7 +57,7 @@ window.onload = function() {
         this.collection = [this.a, this.b, this.c]; // to easily generate later
     }
 
-    // cycle through each image and draw it in the proper order
+    // Cycle through each image and draw it in the proper order
     MovementTracker.prototype.draw = function(isLastMove){
         // reset canvas first
         ctx.clearRect(0, 0, c.width, c.height);
@@ -89,7 +94,7 @@ window.onload = function() {
     // center square overlaps and grows to size of canvas
     MovementTracker.prototype.lastMove = function(){
         // case to stop drawing
-        if (this.b.w === 300) {
+        if (this.b.w === canvasSquareSize) {
             // center square image is full canvas now
             clearInterval(interval);
         } else {
@@ -107,7 +112,7 @@ window.onload = function() {
         if (this.a.y > 0) {
             this.firstMove();
         // if second iteration of movement (a is on top of canvas and not all the way on right)
-        } else if (this.a.y === 0 && this.a.x < 200) {
+        } else if (this.a.y === 0 && this.a.x < canvasSquareSize - sqSize) {
             this.secondMove();
         // last movement (center circle gets big and is drawn last so that it overlaps)
         } else {
