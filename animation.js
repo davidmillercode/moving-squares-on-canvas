@@ -3,8 +3,9 @@ window.onload = function() {
 
     // set variable units of measurement so we can change the canvasSquareSize and everything scales
     var canvasSquareSize = 300;
-    var sqSize = canvasSquareSize / 3;
-    var halfsqSize = sqSize / 2;
+    var sqSize = canvasSquareSize / 3; // size of each img
+    var halfsqSize = sqSize / 2; // size of half of the img
+    var gifSpeed = 5; // speed of img movement
 
     // create canvas and append to body
     var c = document.createElement('canvas');
@@ -22,7 +23,7 @@ window.onload = function() {
     var movementTracker = new MovementTracker(topLeft, middle, bottomRight);
     var interval = setInterval(function(){
         movementTracker.move();
-    }, 7);
+    }, gifSpeed);
 
     // Png objects are the individual img squares loaded externally
     function Png(x, y, w, h, url){
@@ -77,31 +78,34 @@ window.onload = function() {
 
     // TL and BR going toward corners
     MovementTracker.prototype.firstMove = function(){
-        this.a.x -= 1;
-        this.a.y -= 1;
-        this.c.x += 1;
-        this.c.y += 1;
+        var amtToMove = .5;
+        this.a.x -= amtToMove;
+        this.a.y -= amtToMove;
+        this.c.x += amtToMove;
+        this.c.y += amtToMove;
         this.draw();
     };
 
     // TL and BR going to opposite horizontal corner
     MovementTracker.prototype.secondMove = function(){
-        this.a.x += 1;
-        this.c.x -= 1;
+        var amtToMove = 1;
+        this.a.x += amtToMove;
+        this.c.x -= amtToMove;
         this.draw();
     };
 
     // center square overlaps and grows to size of canvas
     MovementTracker.prototype.lastMove = function(){
+        var amtToMove = 1;
         // case to stop drawing
         if (this.b.w === canvasSquareSize) {
             // center square image is full canvas now
             clearInterval(interval);
         } else {
-            this.b.w += 2;
-            this.b.h += 2;
-            this.b.x -= 1;
-            this.b.y -= 1;
+            this.b.w += amtToMove * 2;
+            this.b.h += amtToMove * 2;
+            this.b.x -= amtToMove;
+            this.b.y -= amtToMove;
             this.draw(true); // true to tell that it's the last move
         }
     };
